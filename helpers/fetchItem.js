@@ -1,5 +1,6 @@
 const fetchItem = () => {
-  // seu código aqui
+  // seu código aqui 
+  // primeiro commit
 };
 
 if (typeof module !== 'undefined') {
