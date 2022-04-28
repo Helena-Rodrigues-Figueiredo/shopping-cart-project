@@ -1,10 +1,4 @@
-// const { fetchProducts } = require('./helpers/fetchProducts');
-
-// const { fetchItem } = require("./helpers/fetchItem");
-
-// const { fetchItem } = require("./helpers/fetchItem");
-
-// const { fetchItem } = require("./helpers/fetchItem");
+const apagaItens = document.querySelector('.empty-cart');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -68,7 +62,14 @@ const insereElementos = async () => {
   });
 };
 
+const limparCarrinho = async () => {
+  const elementOl = document.querySelector('ol');
+  elementOl.innerHTML = '';
+};
+
+apagaItens.addEventListener('click', limparCarrinho);
+
 insereElementos();
 adicionaAoCarrinho();
 
-window.onload = () => { };
+window.onload = () => {};
