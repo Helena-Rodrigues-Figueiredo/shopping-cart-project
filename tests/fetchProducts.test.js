@@ -15,13 +15,13 @@ describe('1 - Teste a função fecthProducts', () => {
   const endpoint = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
   expect(fetch).toHaveBeenCalledWith(endpoint);
   })
-  // it('Verifica se a estrutura de dados é igual ao objeto computadorSearch', async () => {
-  // await fetchProducts('computador');
-  // expect(fetch).toMatchObject(computadorSearch);
-  // })
+  it('Verifica se a estrutura de dados é igual ao objeto computadorSearch', async () => {
+  const url = `https://api.mercadolibre.com/sites/MLB/search?q=computador`;
+  const data = await fetch(url);
+  const dataJson = await data.json();
+  expect(dataJson).toMatchObject(computadorSearch);
+  })
   it('Verifica se retorna "You must provide an url" quando não é passado nenhum argumento', async () => {
-    const erro = new Error('You must provide an url.');
-    await fetchProducts();
-    expect(fetch).toMatchObject(erro);
+  await expect(fetchProducts()).rejects.toThrowError(new Error('You must provide an url'));
     })
 });
