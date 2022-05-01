@@ -54,6 +54,8 @@ function createProductItemElement({ sku, name, image }) {
 
 const insereElementos = async () => {
   const elementos = await fetchProducts('computador');
+  const limpar = document.querySelector('.items');
+  limpar.innerHTML = '';
   elementos.forEach((elemento) => {
     const { id, title, thumbnail } = elemento;
     const criaElemento = createProductItemElement({ sku: id, name: title, image: thumbnail });
