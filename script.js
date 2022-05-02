@@ -97,4 +97,5 @@ window.onload = () => {
   arrayOl.forEach((elemento) => {
     elemento.addEventListener('click', cartItemClickListener);
   });
+  sum();
 };
