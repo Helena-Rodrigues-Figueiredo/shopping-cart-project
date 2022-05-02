@@ -70,6 +70,7 @@ const insereElementos = async () => {
 const limparCarrinho = async () => {
   const elementOl = document.querySelector('ol');
   elementOl.innerHTML = '';
+  saveCartItems(ol);
 };
 
 apagaItens.addEventListener('click', limparCarrinho);
