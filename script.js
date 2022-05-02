@@ -1,5 +1,17 @@
 const apagaItens = document.querySelector('.empty-cart');
 const ol = document.querySelector('ol');
+let total = 0;
+const paragrafo = document.querySelector('.total-price');
+
+const sum = async () => {
+  const arrayOl = document.querySelectorAll('li');
+  total = 0;
+  arrayOl.forEach((element) => {
+    const price = parseFloat(element.innerText.split('$')[1]);
+    total += price;
+  });
+  paragrafo.innerText = `Subtotal: ${total.toFixed(2)}`;
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -18,6 +30,7 @@ function createCustomElement(element, className, innerText) {
 function cartItemClickListener(event) {
   event.target.remove();
   saveCartItems(ol);
+  sum();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -36,6 +49,7 @@ const adicionaAoCarrinho = async (event) => {
   const elementoClasse = document.querySelector('.cart__items');
   elementoClasse.appendChild(criaElemento);
   saveCartItems(ol);
+  event.addEventListener('click', sum());
 };
 
 function createProductItemElement({ sku, name, image }) {
@@ -71,6 +85,7 @@ const limparCarrinho = async () => {
   const elementOl = document.querySelector('ol');
   elementOl.innerHTML = '';
   saveCartItems(ol);
+  sum();
 };
 
 apagaItens.addEventListener('click', limparCarrinho);
