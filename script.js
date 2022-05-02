@@ -1,4 +1,5 @@
 const apagaItens = document.querySelector('.empty-cart');
+const ol = document.querySelector('ol');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -16,6 +17,7 @@ function createCustomElement(element, className, innerText) {
 
 function cartItemClickListener(event) {
   event.target.remove();
+  saveCartItems(ol);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -33,6 +35,7 @@ const adicionaAoCarrinho = async (event) => {
   const criaElemento = createCartItemElement({ sku: id, name: title, salePrice: price });
   const elementoClasse = document.querySelector('.cart__items');
   elementoClasse.appendChild(criaElemento);
+  saveCartItems(ol);
 };
 
 function createProductItemElement({ sku, name, image }) {
@@ -53,7 +56,7 @@ function createProductItemElement({ sku, name, image }) {
 // }
 
 const insereElementos = async () => {
-    const { results } = await fetchProducts('computador');
+  const { results } = await fetchProducts('computador');
   const limpar = document.querySelector('.items');
   limpar.innerHTML = '';
   results.forEach((elemento) => {
@@ -71,7 +74,11 @@ const limparCarrinho = async () => {
 
 apagaItens.addEventListener('click', limparCarrinho);
 
-insereElementos();
-adicionaAoCarrinho();
-
-window.onload = () => {};
+window.onload = () => {
+  insereElementos();
+  ol.innerHTML = getSavedCartItems();
+  const arrayOl = document.querySelectorAll('li');
+  arrayOl.forEach((elemento) => {
+    elemento.addEventListener('click', cartItemClickListener);
+  });
+};
