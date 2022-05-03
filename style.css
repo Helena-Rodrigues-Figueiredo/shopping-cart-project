@@ -114,6 +114,15 @@ body {
   text-align: center;
 }
 
+.item .item__value {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  padding: 8px;
+  justify-content: center;
+  font-weight: 600;
+}
+
 .item .item__image {
   width: 100%;
 }

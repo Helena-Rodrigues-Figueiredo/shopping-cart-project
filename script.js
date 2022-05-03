@@ -52,30 +52,32 @@ const adicionaAoCarrinho = async (event) => {
   event.addEventListener('click', sum());
 };
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ sku, name, image, value }) {
   const section = document.createElement('section');
   section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createCustomElement('span', 'item__value', value));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'))
   .addEventListener('click', adicionaAoCarrinho);
 
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
-
 const insereElementos = async () => {
   const { results } = await fetchProducts('computador');
   const limpar = document.querySelector('.items');
   limpar.innerHTML = '';
   results.forEach((elemento) => {
-    const { id, title, thumbnail } = elemento;
-    const criaElemento = createProductItemElement({ sku: id, name: title, image: thumbnail });
+    const { id, title, thumbnail, price } = elemento;
+    const criaElemento = createProductItemElement({ 
+      sku: id, 
+      name: title, 
+      image: thumbnail, 
+      value: `R$ ${price.toFixed(2)}`, 
+    });
     const elementoClasse = document.querySelector('.items');
     elementoClasse.appendChild(criaElemento);
   });
