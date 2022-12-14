@@ -1,7 +1,7 @@
-const apagaItens = document.querySelector('.empty-cart');
-const ol = document.querySelector('ol');
+const removeProducts = document.querySelector('.empty-cart');
+const olElements = document.querySelector('ol');
 let total = 0;
-const paragrafo = document.querySelector('.total-price');
+const paragraph = document.querySelector('.total-price');
 
 const sum = async () => {
   const arrayOl = document.querySelectorAll('li');
@@ -10,7 +10,7 @@ const sum = async () => {
     const price = parseFloat(element.innerText.split('$')[1]);
     total += price;
   });
-  paragrafo.innerText = `Subtotal: ${total.toFixed(2)}`;
+  paragraph.innerText = `Subtotal: ${total.toFixed(2)}`;
 };
 
 function createProductImageElement(imageSource) {
@@ -29,7 +29,7 @@ function createCustomElement(element, className, innerText) {
 
 function cartItemClickListener(event) {
   event.target.remove();
-  saveCartItems(ol);
+  saveCartItems(olElements);
   sum();
 }
 
@@ -41,14 +41,19 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-const adicionaAoCarrinho = async (event) => {
-  const teste = event.target.parentNode.firstChild.innerText;
-  const elementos = await fetchItem(teste);
-  const { id, title, price } = elementos;
-  const criaElemento = createCartItemElement({ sku: id, name: title, salePrice: price });
+const addToCart = async (event) => {
+  const productId = event.target.parentNode.firstChild.innerText;
+  const product = await fetchItem(productId);
+  const { id, title, price } = product;
+  
+  const createElement = createCartItemElement({
+    sku: id,
+    name: title,
+    salePrice: price,
+  });
   const elementoClasse = document.querySelector('.cart__items');
-  elementoClasse.appendChild(criaElemento);
-  saveCartItems(ol);
+  elementoClasse.appendChild(createElement);
+  saveCartItems(olElements);
   event.addEventListener('click', sum());
 };
 
@@ -60,41 +65,47 @@ function createProductItemElement({ sku, name, image, value }) {
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createCustomElement('span', 'item__value', value));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'))
-  .addEventListener('click', adicionaAoCarrinho);
+  section
+    .appendChild(
+      createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
+    )
+    .addEventListener('click', addToCart);
 
   return section;
 }
 
-const insereElementos = async () => {
+const insertElements = async () => {
   const { results } = await fetchProducts('computador');
-  const limpar = document.querySelector('.items');
-  limpar.innerHTML = '';
-  results.forEach((elemento) => {
-    const { id, title, thumbnail, price } = elemento;
-    const criaElemento = createProductItemElement({ 
-      sku: id, 
-      name: title, 
-      image: thumbnail, 
-      value: `R$ ${price.toFixed(2)}`, 
+
+  const clean = document.querySelector('.items');
+  clean.innerHTML = '';
+
+  results.forEach((product) => {
+    const { id, title, thumbnail, price } = product;
+    const createElement = createProductItemElement({
+      sku: id,
+      name: title,
+      image: thumbnail,
+      value: `R$ ${price.toFixed(2)}`,
     });
-    const elementoClasse = document.querySelector('.items');
-    elementoClasse.appendChild(criaElemento);
+
+    const elementClass = document.querySelector('.items');
+    elementClass.appendChild(createElement);
   });
 };
 
-const limparCarrinho = async () => {
+const cleanCart = async () => {
   const elementOl = document.querySelector('ol');
   elementOl.innerHTML = '';
-  saveCartItems(ol);
+  saveCartItems(olElements);
   sum();
 };
 
-apagaItens.addEventListener('click', limparCarrinho);
+removeProducts.addEventListener('click', cleanCart);
 
 window.onload = () => {
-  insereElementos();
-  ol.innerHTML = getSavedCartItems();
+  insertElements();
+  olElements.innerHTML = getSavedCartItems();
   const arrayOl = document.querySelectorAll('li');
   arrayOl.forEach((elemento) => {
     elemento.addEventListener('click', cartItemClickListener);
